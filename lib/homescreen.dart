@@ -1,7 +1,31 @@
+import 'package:adidas/adiclub_screen.dart';
+import 'package:adidas/favorite_screen.dart';
+import 'package:adidas/home_screen.dart';
+import 'package:adidas/search_screen.dart';
+import 'package:adidas/shopping_screen.dart';
 import 'package:flutter/material.dart';
 
-class Homescreen extends StatelessWidget {
-  const Homescreen({super.key});
+class HomescreenNavi extends StatefulWidget {
+  const HomescreenNavi({super.key});
+
+  @override
+  State<HomescreenNavi> createState() => _HomescreenState();
+}
+
+class _HomescreenState extends State<HomescreenNavi> {
+  int _selectedIndex = 0;
+  final Map<int, Map<String, Widget>> _navigationMap = {
+    0: {"title": const Text("Home"), "screen": HomeScreen()},
+    1: {"title": const Text("Search"), "screen": SearchScreen()},
+    2: {"title": const Text("Favorites"), "screen": FavoriteScreen()},
+    3: {"title": const Text("Cart"), "screen": ShoppingScreen()},
+    4: {"title": const Text("AdiClub"), "screen": AdiclubScreen()},
+  };
+  void onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -10,16 +34,16 @@ class Homescreen extends StatelessWidget {
       home: Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.white,
-          title: Text(
+          title: const Text(
             "SHOP",
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
           actions: <Widget>[
             Container(
-              margin: EdgeInsets.only(right: 20),
+              margin: const EdgeInsets.only(right: 20),
               child: IconButton(
                 onPressed: () {},
-                icon: Icon(
+                icon: const Icon(
                   Icons.person_outline_rounded,
                   color: Colors.black,
                 ),
@@ -27,120 +51,36 @@ class Homescreen extends StatelessWidget {
             ),
           ],
         ),
-        body: Column(
-          children: [
-            Container(
-              decoration: BoxDecoration(
-                border: Border(
-                  top: BorderSide(color: Colors.black.withOpacity(0.2)),
-                  bottom: BorderSide(color: Colors.black.withOpacity(0.2)),
+        body: IndexedStack(
+          index: _selectedIndex,
+          children:
+              _navigationMap.values.map((page) => page["screen"]!).toList(),
+        ),
+        bottomNavigationBar: BottomNavigationBar(
+          currentIndex: _selectedIndex,
+          onTap: onItemTapped,
+          selectedItemColor: Colors.black,
+          unselectedItemColor: Colors.grey,
+          items: [
+            BottomNavigationBarItem(
+                icon: Image.asset(
+                  "assets/Images/logo.png",
+                  width: 30,
+                  height: 30,
                 ),
-              ),
-              child: Row(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.all(15),
-                    child: Icon(Icons.search_rounded),
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(left: 10),
-                    child: Text(
-                      "Find products",
-                      style: TextStyle(color: Colors.black.withOpacity(0.5)),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Row(
-              children: [
-                TextButton(
-                  onPressed: () {},
-                  child: Text(
-                    "WOMEN",
-                    style: TextStyle(
-                        fontSize: 10,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black),
-                  ),
+                label: ""),
+            BottomNavigationBarItem(icon: Icon(Icons.search), label: ""),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.favorite_border_outlined), label: ""),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.shopping_bag_outlined), label: ""),
+            BottomNavigationBarItem(
+                icon: Image.asset(
+                  "assets/Images/adiclub.png",
+                  width: 30,
+                  height: 30,
                 ),
-                TextButton(
-                  onPressed: () {},
-                  child: Text(
-                    "MEN",
-                    style: TextStyle(
-                        fontSize: 10,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black),
-                  ),
-                ),
-                TextButton(
-                  onPressed: () {},
-                  child: Text(
-                    "KIDS",
-                    style: TextStyle(
-                        fontSize: 10,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black),
-                  ),
-                ),
-              ],
-            ),
-            Image.asset("Images/sample.png"),
-            Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                children: [
-                  Container(
-                    padding: EdgeInsets.all(15),
-                    decoration: BoxDecoration(
-                      border: Border(
-                        bottom: BorderSide(color: Colors.black.withOpacity(0.5),),
-                      ),
-                    ),
-                    child: ListTile(
-                      minVerticalPadding: 0,
-                      leading: Image.asset("Images/shoes_icon.png",width: 35,height: 35,),
-                      title: Padding(padding: EdgeInsets.only(left: 10),child: Text("SHOES"),),
-                      trailing: Icon(Icons.arrow_forward_ios_rounded),
-                      
-                    ),
-                  ),
-                   Container(
-                    padding: EdgeInsets.all(15),
-                    decoration: BoxDecoration(
-                      border: Border(
-                        bottom: BorderSide(color: Colors.black.withOpacity(0.5),),
-                      ),
-                    ),
-                    child: ListTile(
-                      minVerticalPadding: 0,
-                      leading: Image.asset("Images/cloth.png",width: 35,height: 35,),
-                      title: Padding(padding: EdgeInsets.only(left: 10),child: Text("CLOTH"),),
-                      trailing: Icon(Icons.arrow_forward_ios_rounded),
-                      
-                    ),
-                  ),
-                   Container(
-                    padding: EdgeInsets.all(15),
-                    decoration: BoxDecoration(
-                      border: Border(
-                        bottom: BorderSide(color: Colors.black.withOpacity(0.5),),
-                      ),
-                    ),
-                    child: ListTile(
-                      minVerticalPadding: 0,
-                      leading: Image.asset("Images/accessories.png",width: 35,height: 35,),
-                      title: Padding(padding: EdgeInsets.only(left: 10),child: Text("ACCESSORIES"),),
-                      trailing: Icon(Icons.arrow_forward_ios_rounded),                      
-                    ),
-                  ),
-                ],
-              ),
-              ),
-               
-            ),
-            
+                label: ""),
           ],
         ),
       ),
